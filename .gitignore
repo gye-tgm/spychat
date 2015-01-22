@@ -46,3 +46,9 @@ html/
 report/
 __pycache__/
 _build/
+
+# Virtualenv
+lib
+include
+bin
+.Python
