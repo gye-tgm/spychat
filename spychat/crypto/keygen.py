@@ -1,4 +1,13 @@
+"""
+Securely generates a new RSA key-pair and saves public- and private-key in
+separate files.
+
+Usage: ``python keygen.py <priv key filename> <pub key filename>``
+"""
+
 from Crypto.PublicKey import RSA
+import sys
+from spychat.crypto.constants import *
 
 
 def save_key(filename, content):
@@ -6,18 +15,20 @@ def save_key(filename, content):
         file.write(content)
 
 
-KEY_LENGTH = 2048
-E = 65537
+if len(sys.argv) != 3:
+    print("Usage: python keygen.py <priv key filename> <pub key filename>")
+    sys.exit()
 
-FORMAT = 'PEM'
+priv_key_file = sys.argv[1]
+pub_key_file = sys.argv[2]
 
-priv_key_file = 'key.priv'
-pub_key_file = 'key.pub'
+# generate a new RSA keypair
+keypair = RSA.generate(RSA_KEY_LEN, e=RSA_E)
 
-keypair = RSA.generate(KEY_LENGTH, e=E)
+# extract the public and private key in a storable format
+pub_key = keypair.publickey().exportKey(RSA_KEY_FORMAT)
+priv_key = keypair.exportKey(RSA_KEY_FORMAT)
 
-pub_key = keypair.publickey().exportKey(FORMAT)
-priv_key = keypair.exportKey(FORMAT)
-
+# save the keys in files
 save_key(pub_key_file, pub_key)
 save_key(priv_key_file, priv_key)
