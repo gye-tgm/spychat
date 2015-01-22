@@ -12,7 +12,7 @@ def unpad(data):
 
 def encrypt(data, key, iv=None):
     """
-    Encrypts the given data with the given key and iv.
+    Encrypts the given data with the given key and iv
 
     :param String data:     the data to encrypt
     :param bytearray() key: the key to use for encryption
@@ -30,7 +30,7 @@ def encrypt(data, key, iv=None):
 
 def decrypt(data, key, iv=None):
     """
-    Decrypts the given data using the given key and iv.
+    Decrypts the given data using the given key and iv
 
     :param String data:     the data to decrypt
     :param bytearray() key: the key to use for decryption
@@ -46,3 +46,12 @@ def decrypt(data, key, iv=None):
     aes = AES.new(key, AES_MODE, iv)
 
     return unpad(aes.decrypt(data))
+
+def gen_key():
+    """
+    Generates a new random key to use for symmetric encryption
+
+    :return bytearray(): the randomly generated key
+    """
+
+    return Random.new().read(AES_KEY_LEN)

@@ -7,6 +7,7 @@ Usage: ``python keygen.py <priv key filename> <pub key filename>``
 
 from Crypto.PublicKey import RSA
 import sys
+from spychat.crypto import asymmetric
 from spychat.crypto.constants import *
 
 
@@ -23,7 +24,7 @@ priv_key_file = sys.argv[1]
 pub_key_file = sys.argv[2]
 
 # generate a new RSA keypair
-keypair = RSA.generate(RSA_KEY_LEN_BITS, e=RSA_E)
+keypair = asymmetric.gen_key()
 
 # extract the public and private key in a storable format
 pub_key = keypair.publickey().exportKey(RSA_KEY_FORMAT)
