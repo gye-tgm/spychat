@@ -23,7 +23,7 @@ priv_key_file = sys.argv[1]
 pub_key_file = sys.argv[2]
 
 # generate a new RSA keypair
-keypair = RSA.generate(RSA_KEY_LEN, e=RSA_E)
+keypair = RSA.generate(RSA_KEY_LEN_BITS, e=RSA_E)
 
 # extract the public and private key in a storable format
 pub_key = keypair.publickey().exportKey(RSA_KEY_FORMAT)
