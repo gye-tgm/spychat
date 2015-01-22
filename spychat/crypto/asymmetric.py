@@ -37,14 +37,3 @@ def gen_key():
     """
 
     return RSA.generate(RSA_KEY_LEN_BITS, e=RSA_E)
-
-key = gen_key()
-
-message = symmetric.gen_key()
-
-ct = encrypt(message, key.publickey())
-pt = decrypt(ct, key)
-
-print(message)
-print(ct)
-print(pt)
