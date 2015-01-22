@@ -1,2 +1,7 @@
-# spychat
-The only secure way to chat. Seriously.
+# sPyChat
+
+```
+virtualenv -p python3 .
+source bin/activate
+pip install pycrypto
+```
