@@ -1,9 +1,8 @@
-__author__ = 'gary'
-
 import socket
+import pickle
 
 
-class Server:
+class Server(object):
     def __init__(self, port=50007):
         self.port = port
 
@@ -12,15 +11,28 @@ class Server:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(('', self.port))
         s.listen(1)
+
         conn, addr = s.accept()
 
-        print('Connected by', addr)
+        print('Connection established with', addr)
 
-        data = conn.recv(2048)
+        buf = bytes()
 
+        while True:
+            data = conn.recv(2048)
+
+            if data:
+                buf += data
+            else:
+                break
         conn.close()
-        return data
+        return buf
+
+
+class PickleServer(Server):
+    def listen(self):
+        return pickle.loads(super(PickleServer, self).listen())
 
 # Test code
-server = Server()
+server = PickleServer()
 print(server.listen())
