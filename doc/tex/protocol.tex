@@ -43,7 +43,7 @@
 		#1}}
 {}
 
-\title{DezSys05 - Load Balancing}
+\title{DezSys06 - Verschluesselung}
 \author{Elias Frantar, Gary Ye (5AHITT)}
 \date{\today{}, Wien}
 \begin{document}
@@ -203,6 +203,63 @@ Here are some suggestions how we would have solved the above mentioned problems:
 	that they are sent only once.
 	
 \end{description}
+
+\subsection{IP and TCP protocol}
+
+Sniffing the packages is very simple, but interpreting them
+appropriately is a completely different kettle of fish. 
+
+The structure of the IP and the TCP headers were proposed in RFC 791
+and RFC 793 respectively, but they can also be found below. 
+
+For example, the IP header, as suggested in RFC 791 \cite{rfc791}, has
+the following structure. 
+
+%    IP Header (http://tools.ietf.org/html/rfc791):
+\begin{lstlisting}
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |Version|  IHL  |Type of Service|          Total Length         |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |         Identification        |Flags|      Fragment Offset    |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Time to Live |    Protocol   |         Header Checksum       |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                       Source Address                          |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                    Destination Address                        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                    Options                    |    Padding    |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+\end{lstlisting}
+
+And the TCP header, as suggested in RFC 793 \cite{rfc793}:
+
+\begin{lstlisting}
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |          Source Port          |       Destination Port        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                        Sequence Number                        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                    Acknowledgment Number                      |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Data |           |U|A|P|R|S|F|                               |
+  | Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+  |       |           |G|K|H|T|N|N|                               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |           Checksum            |         Urgent Pointer        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                    Options                    |    Padding    |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                             data                              |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+\end{lstlisting}
+
+\lstinline|data| is, as the name suggests, the content of the package,
+and will contain the plain text, or cipher text in our exercise. 
 
 \section{Implementation}
 
