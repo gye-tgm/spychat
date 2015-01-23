@@ -1,0 +1,258 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{subcaption}
+
+\lstnewenvironment{python}[1][]
+{\lstset{
+		language=python,
+		numbers=left,
+		numberstyle=\tiny,
+		keywordstyle=\color{blue},       	% keyword style
+		basicstyle=\footnotesize\ttfamily,	% font
+		numbers=left,						% line numbers
+		tabsize=2,							% tabsize in spaces
+		#1}}
+{}
+
+\lstnewenvironment{bash}[1][]
+{\lstset{
+		language=bash,
+		numbers=left,
+		numberstyle=\tiny,
+		numbers=none,
+		basicstyle=\footnotesize\ttfamily,	% font
+		tabsize=2,							% tabsize in spaces
+		#1}}
+{}
+
+\lstnewenvironment{code}[1][]
+{\lstset{numbers=left,
+		numberstyle=\tiny,
+		keywordstyle=\color{blue},       % keyword style
+		basicstyle=\footnotesize\ttfamily,	% font
+		numbers=left,						% line numbers
+		tabsize=2,							% tabsize in spaces
+		#1}}
+{}
+
+\title{DezSys05 - Load Balancing}
+\author{Elias Frantar, Gary Ye (5AHITT)}
+\date{\today{}, Wien}
+\begin{document}
+
+\lstset{
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+% commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+% frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+% language=bash,                   % the language of the code
+  morekeywords={*,...},            % if you want to add more keywords to the set
+  numbers=none,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+%  numberstyle=\tiny\color{gray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+%  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{red},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  title=\lstname,                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+  belowskip=-3em,    
+}
+
+\setlength\parindent{0pt}
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+\section{Requirements}
+
+\subsection{Kommunikation [12 Pkt]}
+
+Programmieren Sie eine Kommunikationsschnittstelle zwischen zwei Programmen (Sockets; Übertragung von Strings). Implementieren Sie dabei eine unsichere (plainText) und eine sichere (secure-connection) Übertragung.
+\\\\
+Bei der secure-connection sollen Sie eine hybride Übertragung nachbilden. D.h. generieren Sie auf einer Seite einen privaten sowie einen öffentlichen Schlüssel, die zur Sessionkey Generierung verwendet werden. Übertragen Sie den öffentlichen Schlüssel auf die andere Seite, wo ein gemeinsamer Schlüssel für eine synchrone Verschlüsselung erzeugt wird. Der gemeinsame Schlüssel wird mit dem öffentlichen Schlüssel verschlüsselt und übertragen. Die andere Seite kann mit Hilfe des privaten Schlüssels die Nachricht entschlüsseln und erhält den gemeinsamen Schlüssel.
+
+\subsection{Sniffer [4 Pkt]}
+
+Schreiben Sie ein Sniffer-Programm (Bsp. mithilfe der jpcap-Library http://jpcap.sourceforge.net oder jNetPcap-Library http://jnetpcap.com/), welches die plainText-Übertragung abfangen und in einer Datei speichern kann. Versuchen Sie mit diesem Sniffer ebenfalls die secure-connection anzuzeigen.
+
+\subsection{Info}
+
+Gruppengröße: 2 Mitglieder \\
+Punkte: 16
+
+\begin{itemize}
+	\item Erzeugen von Schlüsseln: 4 Punkte
+	\item Verschlüsselte Übertragung: 4 Punkte
+	\item Entschlüsseln der Nachricht: 4 Punkte
+	\item Sniffer: 4 Punkte
+\end{itemize}
+
+\section{Effort Estimation and Work Distribution}
+
+The following table compares the estimated with the actually needed
+amount of time for completing each individual task.
+\\\\
+The estimation is in the second column while the columns that follow
+are actual values.
+
+\parskip 12pt
+\begin{tabular} {| l | c | c | c | c |}
+	\hline
+	Task					&	Estimation		& 	Elias 	& 	Gary 	& 	Team	\\ \hline \hline
+	Preparation				&					&			&  			&			\\ \hline
+	Design					&					&			&			&			\\ \hline
+	Implementation			&					&			&			& 	 		\\ \hline
+	Testing					&					&			& 			& 	 		\\ \hline
+	Documentation			&					&			&			& 			\\ \hline 
+	Total					&					&			&			& 			\\
+	\hline
+\end{tabular}
+
+\newpage
+
+\section{Design}
+
+\subsection{Used Tools \& Libraries}
+
+\subsection{Application Design}
+
+\subsection{Encryption Parameters}
+
+For symmetric encryption we decided to use the very standard \textit{AES} with
+128 bit key- and block-size. We used the algorithm in \textit{Cipher Block
+	Chaining (CBC)} mode with \textit{PKCS5} padding for messages which are too
+short.
+\\\\
+For asymmetric encryption we used \textit{RSA} with \textit{PKCS1 Optimal
+	Asymmetric Encrytpion Padding (OAEP)}. The keys are 2048 bits long and have a
+public exponent of \textit{65537}.
+\\\\
+Both keys are generated by the cryptographically strong RNG implementation of
+PyCrypto.
+
+\subsection{Protocol Flaws \& Proposed Solutions}
+
+The encryption protocol was implemented \textbf{as requested in the problem
+	statement}. This protocol has some serious issues though:
+
+\begin{description}
+	
+	\item[Man in the Middle Attacks] Since the public key is sent in plain
+	without any certificates and signatures, it is incredibly easy for Eve to
+	replace this key with her own and perform a full \textit{Man in the Middle}
+	attack.
+	
+	\item[No Authentication] Both the key-exchange messages and the standard
+	messages are sent without any type of authentication. This means that an
+	attacker can arbitrarily modify them without being detected, which can
+	lead to numerous very dangerous attacks.
+	
+	\item[Replay Attacks] Since messages are sent without any timestamps or
+	message-counters Eve can easily resend messages at any time. This is
+	negligible in comparison to the other flaws though.
+	
+\end{description}
+
+Since the goal of this exercise was to get familiar with implementing crypto
+and not to build a really secure application and due to time constraints, we
+decided \textbf{not to fix this issues}.
+\\\\
+Here are some suggestions how we would have solved the above mentioned problems:
+
+\begin{description}
+	
+	\item[Use TLS] The proposed protocol is just a minified and therefore very
+	weak version of \textit{TLS}. So probably the easiest and \textbf{most
+		secure} solution would be to use a tested common TLS implementation.
+	
+	\item[Use Digital Signatures] The only real way to prevent Man in the Middle
+	attacks without \textit{real} certificates is to store public keys on the
+	client side (copied before communication over a secure channel; ex. USB) and
+	then send the keys in combination with a digital signature. The client can
+	then verify this signature used one of the locally stored keys and therefore
+	ensure that he is communication with the correct key owner.
+	
+	\item[Use MACs / or AES GCM-mode] The authentication issue could be resolved
+	quite simply by applying a \textit{Message Authentication Code (MAC)} to
+	each sent message. The same could be achieved by just using AES in
+	\textit{Galois Counter Mode}.
+	
+	\item[Use Timestamps or Message Counters] The replay issue could be
+	addressed by appending timestamps to messages or using counters to ensure
+	that they are sent only once.
+	
+\end{description}
+
+\section{Implementation}
+
+\subsection{Crypto}
+
+\subsection{Chat}
+
+\subsection{Sniffer}
+
+
+\section{Testing}
+
+\subsection{Crypto}
+
+\subsection{Chat}
+
+\subsection{Sniffer}
+
+\section{Problems \& Solutions}
+
+\subsection{PyCrypto AES Counter Mode}
+
+We originally wanted to used CTR mode for AES to avoid having to implement
+padding. For some reason the CTR PyCrypto interface is really obscure and we
+did not manage to get it working.
+\\\\
+So we simply switched to CBC and quickly implemented PKCS5 padding.
+
+\subsection{Sending Public Keys}
+
+Sending public keys (\lstinline{keypair.publickey()} generated by PyCrypto
+proved to be an pretty odd problem because when trying to use the
+\textit{properly} received keys for encryption, it caused an Exception that
+some kind of random function is not defined.
+\\\\
+It turned out that public key objects are not meant to be sent around and
+therefore have to be exported to a transmittable format beforehand. The above
+code works fine:
+
+\begin{lstlisting}
+# `PEM` is just some standardized RSA-key format
+pub_key = RSA.exportKey(keypair.publickey(), 'PEM')
+
+# send `pub_key`
+
+pub_key = RSA.importKey(received_key)
+\end{lstlisting}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+\end{document}
