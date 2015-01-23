@@ -5,7 +5,6 @@ separate files.
 Usage: ``python keygen.py <priv key filename> <pub key filename>``
 """
 
-from Crypto.PublicKey import RSA
 import sys
 from spychat.crypto import asymmetric
 from spychat.crypto.constants import *
