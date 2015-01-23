@@ -3,8 +3,6 @@ import socket
 # Important
 # https://docs.python.org/2/library/pickle.html#pickle.HIGHEST_PROTOCOL
 import pickle
-from spychat.crypto import asymmetric
-from spychat.crypto import symmetric
 
 
 class Client(object):

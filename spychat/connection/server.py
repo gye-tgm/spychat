@@ -1,6 +1,5 @@
 import socket
 import pickle
-from spychat.crypto import symmetric
 
 
 class Server(object):
