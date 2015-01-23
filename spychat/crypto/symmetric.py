@@ -1,5 +1,16 @@
+"""
+This module contains easy to use functions for symmetric encryption using
+the `AES`-algorithm.
+"""
+
 from Crypto import Random
-from spychat.crypto.constants import *
+from Crypto.Cipher import AES
+
+
+# encryption parameters used in this file
+AES_MODE = AES.MODE_CBC  #: AES cipher mode
+AES_BLOCK_SIZE = 16  #: AES block-size in bytes
+AES_KEY_LEN = 16  #: AES key-size in bytes
 
 
 # PKCS5 padding implementation
@@ -14,11 +25,11 @@ def encrypt(data, key, iv=None):
     """
     Encrypts the given data with the given key and iv
 
-    :param String data:     the data to encrypt
-    :param bytearray() key: the key to use for encryption
-    :param bytearray() iv:  the IV to use for encryption; if None a new random
-                            one will be generated
-    :return bytearray():    the resulting ciphertext with the used IV prepended
+    :param bytearray() data: the data to encrypt
+    :param bytes() key:      the key to use for encryption
+    :param bytes() iv:       the IV to use for encryption; if `None` a new
+                             random one will be generated
+    :return bytes():         the resulting ciphertext with the used IV prepended
     """
 
     if iv is None:
@@ -32,11 +43,11 @@ def decrypt(data, key, iv=None):
     """
     Decrypts the given data using the given key and iv
 
-    :param String data:     the data to decrypt
-    :param bytearray() key: the key to use for decryption
-    :param bytearray() iv:  the IV to use for decryption; if None the IV is
-                            assumed to be prepended to the ciphertext
-    :return bytearray():    the resulting plaintext
+    :param bytes() data: the data to decrypt
+    :param bytes() key:  the key to use for decryption
+    :param bytes() iv:   the IV to use for decryption; if None the IV is
+                         assumed to be prepended to the ciphertext
+    :return bytes():     the resulting plaintext
     """
 
     if iv is None:
@@ -51,7 +62,7 @@ def gen_key():
     """
     Generates a new random key to use for symmetric encryption
 
-    :return bytearray(): the randomly generated key
+    :return bytes(): the randomly generated key
     """
 
     return Random.new().read(AES_KEY_LEN)
