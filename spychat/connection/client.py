@@ -42,21 +42,3 @@ class Client(object):
 class PickleClient(Client):
     def send(self, obj):
         super(PickleClient, self).send(pickle.dumps(obj))
-
-
-class SecureClient(PickleClient):
-    keypair = None
-    session_key = None
-
-    def send(self, obj):
-        if self.session_key is not None:
-            super(SecureClient, self).send(symmetric.encrypt(obj, self.key))
-
-    def start_key_ex(self):
-        self.keypair = asymmetric.gen_key()
-        self.send(self.keypair.publickey())
-
-# Test code
-client = SecureClient('localhost')
-client.start_key_ex()
-client.send('a' * 10000)

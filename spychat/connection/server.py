@@ -33,19 +33,3 @@ class Server(object):
 class PickleServer(Server):
     def listen(self):
         return pickle.loads(super(PickleServer, self).listen())
-
-
-class SecureServer(PickleServer):
-    session_key = None
-
-    def listen(self):
-        if self.session_key is not None:
-            ciphertext = super(SecureServer, self).listen()
-            return symmetric.decrypt(ciphertext, self.session_key)
-        else:
-            print(super(SecureServer, self).listen())
-
-
-# Test code
-server = SecureServer()
-print(server.listen())
