@@ -24,4 +24,4 @@ python3 alice.py
 
 **WARNING: The provided secure protocol implementation is just for exercise
 purposes and should not be used in real world implementations because of some
-major vulnerabilities (They were requested in the problem statement.)!**
+major vulnerabilities (They were requested in the problem statement ...)!**
