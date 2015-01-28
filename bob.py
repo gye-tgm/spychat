@@ -23,13 +23,13 @@ print('Waiting for key-exchange request ...')
 
 # receive a public key
 other_pub_key = server.listen()
-print('Received a public-key with fingerprint: %s' %
+print('Received a public-key with fingerprint:',
       MD5.new(other_pub_key).hexdigest())
 other_pub_key = RSA.importKey(other_pub_key)  #: keys are sent exported
 
 # generate a session key, encrypt it with the public-key and send it back
 session_key = symmetric.gen_key()
-print('Generated a new session-key: %s' % to_hex(session_key))
+print('Generated a new session-key:', to_hex(session_key))
 enc_session_key = asymmetric.encrypt(session_key, other_pub_key)
 
 client = PickleClient('localhost', 9999)
@@ -38,6 +38,6 @@ print('Sending session-key')
 
 # receive an encrypted message
 m_enc = server.listen()
-print("Received encrypted message: %s" % to_hex(m_enc))
+print('Received encrypted message:', to_hex(m_enc))
 m = symmetric.decrypt(m_enc, session_key)
-print("Decrypted message: " +  m.decode('ASCII'))
+print('Decrypted message:',  m.decode('ASCII'))
