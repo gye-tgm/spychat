@@ -347,8 +347,126 @@ IVs can be created similar to symmetric keys with \lstinline|Random|. They must 
 \subsection{Sniffer}
 
 We implemented the sniffer by considering every sent and received
-packages, and parsing it appropriately, as already described in
-\ref{subsec:iptcp}. 
+package, and parsing them appropriately according to the scheme as
+already described in \ref{subsec:iptcp}. The idea of this low level
+implementation comes from an online article \cite{sniffer_py} that
+suggests decoding the raw packages without using any external
+libraries like \textit{pcap}.
+
+Merely using the following Python code results to a powerful sniffer
+that can be extended by parsing the raw data accordingly. 
+
+\begin{python}
+import socket
+ 
+# create an INET, raw socket
+s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
+
+# receive a packet
+while True:
+  print s.recvfrom(65565)
+\end{python}
+
+The description of our sniffer follows, and we begin by alluding that
+the following program instructions are done in an endless while loop.
+
+We first assign the raw packet \lstinline|bytes| by taking the first
+element of the tuple that the \lstinline|recvfrom()| method returns. 
+
+\begin{python}
+# We will receive the packet 
+packet = s.recvfrom(65565)[0]
+\end{python}
+
+Afterwards, we \textit{unpack} the raw packet by:
+
+\begin{enumerate}
+  \item only considering the first 20 bytes of the packet since these
+    are the header bytes of the IP protocol. 
+  \item unpacking the bytes with the \lstinline|struct.unpack|
+    method according to the ``!BBHHHBBH4s4s'' scheme. In this scheme
+    the meanings of the characters are:
+    
+    \begin{itemize}
+      \item ! meaning this is a network package (=big endian)
+      \item B for unsigned char (1 byte)
+      \item H for unsigned short (2 byte)
+      \item 4s for char[4] which will just be interpreted as
+        \lstinline|str| in Python
+    \end{itemize}
+    The unpack method returns a list with the data in the
+    corresponding indices e.g. list[2] stands for the first unsigned
+    short according to the scheme. 
+\end{enumerate}
+
+\begin{python}
+iph = unpack('!BBHHHBBH4s4s' , packet[0:20])
+\end{python}
+
+Next, we find out the IHL (IP Header Length) according to
+\ref{subsec:iptcp}, by taking the first byte, and only considering the
+last four bits of it. Denote $x$ as the 4 bit integer that is written
+in the IHL. By the definition of RFC791\cite{rfc791}, we know that the
+whole IP header length consists of $x \cdot 32$ bits, thus knowing
+where to start looking for the header of the corresponding protocol
+e.g. TCP header - see below for more information.
+
+The version of the package is irreleveant because we always assume for
+the range of this exercise that IPV4 packages are being exchanged.
+
+\begin{python}
+version_ihl = iph[0]
+version = version_ihl >> 4
+ihl = version_ihl & 0xF
+
+iph_length = ihl * 4
+\end{python}
+
+The protocol should have the value 6, which is also the value for TCP
+protocol. In this exercise, we only filter out TCP packages, but we
+also assume that TCP packages are solely exchanged. 
+
+\begin{python}
+protocol = iph[6]
+\end{python}
+
+Next, we convert the source and destination address by using the
+\lstinline|socket.inet_ntoa| method. The addresses can be used for
+filtering purposes. 
+
+\begin{python}
+src_addr = socket.inet_ntoa(iph[8]);
+dst_addr = socket.inet_ntoa(iph[9]);
+\end{python}
+
+Now that the most essential information are read we can continue by
+reading the TCP header. The scheme for reading the data is similiar to
+above that's why, only the code will be shown below. 
+
+\begin{python}
+tcp_header = packet[iph_length:iph_length+20]
+tcph = unpack('!HHLLBBHHH' , tcp_header)
+
+src_port = tcph[0]
+dst_port = tcph[1]
+doff_reserved = tcph[4]
+tcph_length = doff_reserved >> 4
+
+h_offset = iph_length + tcph_length * 4
+data = packet[h_offset:]
+\end{python}
+
+
+RFC793 \cite{rfc793} states:
+
+\begin{quote}
+\textit{Data Offset} is the number of 32 bit words in the TCP Header.
+This indicates where the data begins.  The TCP header (even one
+including options) is an integral number of 32 bits long.
+\end{quote}
+
+The actual content of the packet is stored in \lstinline|data|, and it
+should be clear why. 
 
 \section{Testing}
 
