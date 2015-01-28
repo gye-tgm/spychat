@@ -5,7 +5,7 @@
 To properly use this python-modules some additional libraries have to be
 installed beforehand. This can be easily accomplished with the commands below.
 
-```
+```bash
 virtualenv -p python3 .
 source bin/activate
 pip install pycrypto
@@ -17,7 +17,7 @@ pip install pycap
 This software ships with two demo-scripts containing a sample implementation of
 an encrypted communication. To test them, just enter the commands below.
 
-```
+```bash
 python3 bob.py
 python3 alice.py
 ```
