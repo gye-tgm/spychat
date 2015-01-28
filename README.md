@@ -10,6 +10,6 @@ pip install pycap
 # Run demo
 
 ```
-python bob.py
-python alice.py
+python3 bob.py
+python3 alice.py
 ```

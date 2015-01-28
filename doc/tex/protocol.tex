@@ -43,7 +43,7 @@
 		#1}}
 {}
 
-\title{DezSys06 - Verschluesselung}
+\title{DezSys06 - Verschlüsselung}
 \author{Elias Frantar, Gary Ye (5AHITT)}
 \date{\today{}, Wien}
 \begin{document}
@@ -264,6 +264,83 @@ and will contain the plain text, or cipher text in our exercise.
 \section{Implementation}
 
 \subsection{Crypto}
+
+Our library of choice for Python was PyCrypto \ref{pycrypto}. Installation works quick and easy via \lstinline|pip| or \textit{PyCharm}.
+\\\\
+This section briefly describes how to perform crypto primitives such as key-generation, en- and decryption in PyCrypto.
+Our full implementations are included in \lstinline|symmetric.py| and \lstinline|asymmetric.py| (\lstinline|spychat/crypto/|).
+
+\subsubsection{Key Generation}
+
+For generating encryption keys cryptographically strong key-generation algorithms are crucial. PyCrypto provides one-liner functions to generate secure keys for symmetric and asymmetric encryption algorithms.
+
+\vspace{5pt}
+\begin{python}
+# asymmetric key-generation
+RSA.generate(RSA_KEY_LEN_BITS, e=RSA_E)
+
+# symmetric key-generation
+Random.new().read(AES_KEY_LEN)
+\end{python}
+\vspace{10pt}
+
+For creating RSA keys a specific function can be used to generate keys of desired length. Symmetric encryption keys can be generated with PyCrypto's general secure random class \lstinline|Random|.
+
+\subsubsection{En- \& Decryption}
+
+PyCrypto also provides a very easy to use interface for RSA encryption.
+
+\vspace{5pt}
+\begin{python}
+	RSA_MODE = PKCS1_OAEP
+	
+	# asymmetric encryption
+	rsa = RSA_MODE.new(public_key)  # `keypair.publickey()`
+	rsa.encrypt(data)
+	
+	# asymmetric decryption
+	rsa = RSA_MODE.new(private_key)
+	return rsa.decrypt(data)
+\end{python}
+\vspace{10pt}
+
+It classes for the different padding-mode, which instances can be intuitively used for performing crypto operations after passing the appropriate keys. We chose \textit{PKCS1\_OAEP} mode since this pretty much the best mode to use for RSA.
+\\\\
+Symmetric encryption is a bit hard in PyCrypto, since it \textit{does not implement automatic padding}. We therefore had to write our own \textit{PKCS5} padding function.
+
+\vspace{5pt}
+\begin{python}
+# PKCS5 padding implementation
+def pad(data):
+	pad_nr = AES_BLOCK_SIZE - (len(data) % AES_BLOCK_SIZE)
+	return data + (chr(pad_nr) * pad_nr)
+def unpad(data):
+	return data[:len(data) - data[-1]]
+\end{python}
+\vspace{10pt}
+
+This type of padding simply repeats the numbers of missing bytes to fill up to the block-length.
+\\\\
+With this function symmetric encryption and decryption isn't much harder either, except that \textit{IVs must randomly generated and prepended to the ciphertext for security reasons.}
+
+\vspace{5pt}
+\begin{python}
+# symmetric encryption
+iv = Random.new().read(AES_BLOCK_SIZE)
+
+aes = AES.new(key, AES_MODE, iv)
+return iv + aes.encrypt(pad(data))
+
+# symmetric decryption
+iv = data[:AES_BLOCK_SIZE]
+data = data[AES_BLOCK_SIZE:]
+
+aes = AES.new(key, AES_MODE, iv)
+return unpad(aes.decrypt(data))
+\end{python}
+\vspace{10pt}
+
+IVs can be created similar to symmetric keys with \lstinline|Random|. They must then be prepended to the ciphertext after encryption and removed and passed to algorithm before decryption. It is also necessary to pad data to the appropriate block-size before encryption (and remove it after decryption of course).
 
 \subsection{Chat}
 
