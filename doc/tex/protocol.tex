@@ -205,7 +205,7 @@ Here are some suggestions how we would have solved the above mentioned problems:
 \end{description}
 
 \subsection{IP and TCP protocol}
-
+\label{subsec:iptcp}
 Sniffing the packages is very simple, but interpreting them
 appropriately is a completely different kettle of fish. 
 
@@ -269,6 +269,9 @@ and will contain the plain text, or cipher text in our exercise.
 
 \subsection{Sniffer}
 
+We implemented the sniffer by considering every sent and received
+packages, and parsing it appropriately, as already described in
+\ref{subsec:iptcp}. 
 
 \section{Testing}
 
@@ -277,6 +280,8 @@ and will contain the plain text, or cipher text in our exercise.
 \subsection{Chat}
 
 \subsection{Sniffer}
+
+
 
 \section{Problems \& Solutions}
 
