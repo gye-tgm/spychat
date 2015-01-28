@@ -205,7 +205,7 @@ Here are some suggestions how we would have solved the above mentioned problems:
 \end{description}
 
 \subsection{IP and TCP protocol}
-
+\label{subsec:iptcp}
 Sniffing the packages is very simple, but interpreting them
 appropriately is a completely different kettle of fish. 
 
@@ -346,14 +346,65 @@ IVs can be created similar to symmetric keys with \lstinline|Random|. They must 
 
 \subsection{Sniffer}
 
+We implemented the sniffer by considering every sent and received
+packages, and parsing it appropriately, as already described in
+\ref{subsec:iptcp}. 
 
 \section{Testing}
 
-\subsection{Crypto}
+For validating the correctness of the programs we performed some
+manual tests that will be described below. The tests were executed on
+a Ubuntu 14.04 machine. 
 
-\subsection{Chat}
+The setup of the test was based on a real life scenario in which two
+partners, say Alice and Bob, want to communicate privately through a
+channel. The communication was done through a secure and an unsecure
+channel, where the former one uses a certain encryption protocol, as
+described in \ref{}, and the latter uses no particular techniques for
+exchanging messages.
 
-\subsection{Sniffer}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\linewidth]{img/test_alice}
+    \caption{Alice}
+    \label{fig:test_alice}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{img/test_bob}
+    \caption{Bob}
+    \label{fig:test_bob}
+  \end{subfigure}
+\end{figure}
+
+While Alice and Bob are chatting, Eve was eavesdropping them by using
+the sniffer which was also implemented throughout this exercise. We
+can see in Figure \ref{fig:test_eve} the messages, or rather the TCP
+packets, that were exchanged during the communication process. 
+
+For the sake of clarity, the most essential part of the TCP headers
+are printed e.g. \lstinline|src_addr|, \lstinline|dst_addr|,
+\lstinline|src_port|, \lstinline|dst_port|. The arguments that were
+passed to the sniffer are the portnumbers that are interesting for the
+user of the script. Only the given ones will be printed out to the
+console, and the others will be omitted. 
+
+It can be seen that the public key of Alice has been successfully
+eavesdropped, and it was printed out in plaintext. Afterwards, we can
+see the encrypted session key beginning that cannot be successfully
+read, as we can see in the lower center of Figure \ref{fig:test_eve}. 
+
+Aftewards two messages were exchange. The first one is simply
+plaintext, and the second one was the message encrypted with the AES
+session key. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{img/test_eve}
+  \caption{Eve}
+  \label{fig:test_eve}
+\end{figure}
+
 
 \section{Problems \& Solutions}
 
