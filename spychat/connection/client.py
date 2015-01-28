@@ -20,10 +20,9 @@ class Client(object):
 
     def send(self, obj):
         """
-        Sends an object to the communication partner (server) as a serialized
-        object, converted with pickle.
+        Sends an object to the communication partner (server). 
 
-        :param bytes obj: the object to send as bytes
+        :param bytes obj: the object to send as a pickle converted object
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(2)
@@ -39,4 +38,8 @@ class Client(object):
 
 class PickleClient(Client):
     def send(self, obj):
+        """Sends an object of type bytes to the communication partner
+        (server) as a serialized object, converted with pickle.
+        :param bytes obj: the object to send
+        """
         super(PickleClient, self).send(pickle.dumps(obj))
