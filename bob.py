@@ -36,6 +36,10 @@ client = PickleClient('localhost', 9999)
 client.send(enc_session_key)
 print('Sending session-key')
 
+# receive an unencrypted message
+m = server.listen()
+print('Received unencrypted message:', m)
+
 # receive an encrypted message
 m_enc = server.listen()
 print('Received encrypted message:', to_hex(m_enc))

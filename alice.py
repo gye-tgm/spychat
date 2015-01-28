@@ -34,6 +34,11 @@ response = server.listen()
 session_key = asymmetric.decrypt(response, keypair)
 print('Received session-key:', to_hex(session_key))
 
+# send an unencrypted message
+m = 'This is an unencrypted message!'
+client.send(m)
+print('Sending unencrypted message:', m)
+
 # send an encrypted message
 m = 'This is an encrypted message!'
 m_enc = symmetric.encrypt(m, session_key)
