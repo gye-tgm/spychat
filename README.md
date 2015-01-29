@@ -9,7 +9,6 @@ installed beforehand. This can be easily accomplished with the commands below.
 virtualenv -p python3 .
 source bin/activate
 pip install pycrypto
-pip install pycap
 ```
 
 ### Run demo
