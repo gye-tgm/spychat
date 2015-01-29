@@ -133,7 +133,6 @@ are actual values.
 
 \section{Design}
 \label{sec:design}
-\subsection{Used Tools \& Libraries}
 
 \subsection{Application Design}
 
@@ -265,7 +264,7 @@ and will contain the plain text, or cipher text in our exercise.
 
 \subsection{Crypto}
 
-Our library of choice for Python was PyCrypto \ref{pycrypto}. Installation works quick and easy via \lstinline|pip| or \textit{PyCharm}.
+Our library of choice for Python was PyCrypto \cite{pycrypto}. Installation works quick and easy via \lstinline|pip| or \textit{PyCharm}.
 \\\\
 This section briefly describes how to perform crypto primitives such as key-generation, en- and decryption in PyCrypto.
 Our full implementations are included in \lstinline|symmetric.py| and \lstinline|asymmetric.py| (\lstinline|spychat/crypto/|).
@@ -341,8 +340,6 @@ return unpad(aes.decrypt(data))
 \vspace{10pt}
 
 IVs can be created similar to symmetric keys with \lstinline|Random|. They must then be prepended to the ciphertext after encryption and removed and passed to algorithm before decryption. It is also necessary to pad data to the appropriate block-size before encryption (and remove it after decryption of course).
-
-\subsection{Chat}
 
 \subsection{Sniffer}
 
