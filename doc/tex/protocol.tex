@@ -136,10 +136,26 @@ are actual values.
 
 \subsection{Application Design}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{img/class-diagram}
+  \caption{The class diagram}
+  \label{fig:class}
+\end{figure}
+
+The Client and the Server classes are responsible for communicating
+through sockets. 
+
 We use \lstinline|pickle| for serializing and deserializing Python
 objects. Pickling, and unpickling is also known as marshalling and
-unmarshalling. More information can be found on the documentation
-page. \cite{pickle}
+unmarshalling. More information about the \lstinline|pickle| module
+can be found on the documentation page \cite{pickle}. The PickleClient
+and the PickleServer merely call the methods of their super class with
+the ``pickled'' objects.
+
+\lstinline|symmetric| and \lstinline|asymmetric| are Python modules
+that offer methods for encrypting and decrypting data symmetricly, and
+asymmetricly respectively.
 
 \subsection{Encryption Parameters}
 
